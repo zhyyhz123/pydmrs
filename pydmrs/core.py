@@ -290,6 +290,14 @@ class Dmrs(object):
         """
         return any(n == nodeid for n in self)
 
+    def keep_nodes(self,nodelist):
+        for node in self.nodes :
+                if node.nodeid not in nodelist :
+                        self.remove_node(node.nodeid)
+
+    def change_top(self,nodeid):
+        self.top = nodeid
+
     def iter_outgoing(self, nodeid):
         """
         Iterate through links going from a given node
