@@ -456,6 +456,32 @@ class Dmrs(object):
                 nodes = list(nodes)
         return nodes
 
+    def get_groups(self,nodeids):
+        group = []
+        while nodeids != []:
+            nodeid = nodeids.pop()
+            if len(group) == 0:
+                group.append([nodeid])
+            else:
+                group_temp = []
+                index = 0
+                record_index = -1
+                while group != []:
+                    g = group.pop()
+                    if len(set([nid for n in self.get_neighbours(nodeid)]).intersection(set(g))):
+                        if record_index == -1:
+                            group_temp.append(g + [nodeid])
+                            record_index = index
+                        else:
+                            group_temp[record_index] += g
+                    else:
+                        group_temp.append(g)
+                    index +=1
+                if record_index == -1:
+                     group_temp.append([nodeid])
+                group = copy.deepcopy(group_temp)
+        return group
+
     def get_neighbours(self, nodeid, rargname=None, post=None, nodeids=False, itr=False):
         """
         Get adjacent nodes (regardless of link direction)
